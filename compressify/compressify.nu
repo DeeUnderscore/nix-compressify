@@ -1,5 +1,5 @@
 #!/usr/bin/env nu
-# target: nu 0.88.1
+# target: nu 0.91.0
 
 def compressify-impl [
   args: record
@@ -7,7 +7,7 @@ def compressify-impl [
   command_closure: closure
 ] {
   mkdir $args.outdir
-  (ls -a $"($args.indir)/**/*"
+  (ls -a ($"($args.indir)/**/*" | into glob)
   | where $it.type == "file"
   | par-each --threads $args.jobs {|it|
     let input_file = ($it.name | path parse)
