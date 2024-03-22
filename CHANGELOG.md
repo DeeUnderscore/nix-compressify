@@ -1,0 +1,8 @@
+# Changelog for nix-compressify
+
+## 1.1.0 (2024-03-22)
+* Update pinned Nixpkgs. Nushell version targeted is now 0.91.0
+* Fix compatibility with new Nushell version. Previous targeted version (0.88.1) is now not compatible.
+
+## 1.0.0 (2024-01-11)
+* Initial release 🎉

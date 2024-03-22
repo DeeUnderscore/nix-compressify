@@ -49,6 +49,9 @@ in {
 }
 ```
 
+## Changes
+For changes, see [CHANGELOG.md](./CHANGELOG.md).
+
 ## API
 
 ### `compressify`
