@@ -6,7 +6,9 @@ def compressify-impl [
   new_ext: string
   command_closure: closure
 ] {
-  mkdir $args.outdir
+  # TODO: use builtin mkdir after Nu v0.92
+  # Current sets wrong perms, see: https://github.com/nushell/nushell/issues/12161
+  ^mkdir -p $args.outdir
   (ls -a ($"($args.indir)/**/*" | into glob)
   | where $it.type == "file"
   | par-each --threads $args.jobs {|it|
@@ -29,7 +31,7 @@ def compressify-impl [
         | update extension {|it| $"($it.extension).($new_ext)"}
       )
 
-      mkdir $target_dir
+      ^mkdir -p $target_dir
 
       let res = (do $command_closure ($input_file | path join) ($target_file | path join) | complete)
 
