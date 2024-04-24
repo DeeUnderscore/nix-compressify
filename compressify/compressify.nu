@@ -38,6 +38,9 @@ def compressify-impl [
         print -e $"Problem compressing ($target_file | path join):"
       }
       print -e $res.stderr
+      if $res.exit_code != 0 {
+        exit $res.exit_code
+      }
 
       let threshold_size = (
         (ls ($input_file | path join) | get 0.size)
