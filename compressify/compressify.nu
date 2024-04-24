@@ -1,5 +1,5 @@
 #!/usr/bin/env nu
-# target: nu 0.91.0
+# target: nu 0.92.1
 
 def compressify-impl [
   args: record
@@ -33,8 +33,7 @@ def compressify-impl [
 
       ^mkdir -p $target_dir
 
-      let res = (do $command_closure ($input_file | path join) ($target_file | path join) | complete)
-
+      let res = (do $command_closure ($input_file | path join) ($target_file | path join))
       if $res.exit_code != 0 {
         print -e $"Problem compressing ($target_file | path join):"
       }
@@ -62,7 +61,7 @@ def brotlify [
   args: record
 ] {
   compressify-impl $args "br" {|infile, outfile|
-    brotli -v --no-copy-stat --best $infile -o $outfile
+    brotli -v --no-copy-stat --best $infile -o $outfile | complete
   }
 }
 
@@ -72,8 +71,7 @@ def zopflify [
   compressify-impl $args "gz" {|infile, outfile|
     # zopfli verbose mode is a bit too verbose
     print -e $"Compressing ($infile)"
-    let result = (zopfli $"--i($args.level)" $infile -c out> $outfile)
-    $result
+    zopfli $"--i($args.level)" $infile -c out> $outfile | complete
   }
 }
 
