@@ -52,6 +52,8 @@ in {
 ## Changes
 For changes, see [CHANGELOG.md](./CHANGELOG.md).
 
+While the API of this library is intended to remain stable, Nushell may introduce breaking changes which break its functionality. This may be a concern if a newer version of Nixpkgs (with a newer version of Nushell) is used with this library. The library should work correctly with the flake-locked version of Nixpkgs. The changelog additionally lists current targeted Nushell version. 
+
 ## API
 
 ### `compressify`
