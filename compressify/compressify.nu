@@ -31,14 +31,14 @@ def compressify-impl [
 
       mkdir $target_dir
 
-      let res = (do $command_closure ($input_file | path join) ($target_file | path join))
-      if $res.exit_code != 0 {
-        print -e $"Problem compressing ($target_file | path join):"
-      }
-      print -e $res.stderr
-      if $res.exit_code != 0 {
-        exit $res.exit_code
-      }
+      let res = (try {
+        do $command_closure ($input_file | path join) ($target_file | path join)
+      } catch {|e|
+        print -e $"Problem compressing ($target_file | path join)"
+        if $e.exit_code != 0 {
+          exit $e.exit_code
+        }
+      })
 
       let threshold_size = (
         (ls ($input_file | path join) | get 0.size)
@@ -62,7 +62,7 @@ def brotlify [
   args: record
 ] {
   compressify-impl $args "br" {|infile, outfile|
-    brotli -v --no-copy-stat --best $infile -o $outfile | complete
+    brotli -v --no-copy-stat --best $infile -o $outfile
   }
 }
 
@@ -72,7 +72,7 @@ def zopflify [
   compressify-impl $args "gz" {|infile, outfile|
     # zopfli verbose mode is a bit too verbose
     print -e $"Compressing ($infile)"
-    zopfli $"--i($args.level)" $infile -c out> $outfile | complete
+    zopfli $"--i($args.level)" $infile -c out> $outfile
   }
 }
 
